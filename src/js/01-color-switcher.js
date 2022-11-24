@@ -19,6 +19,9 @@ const colorSwitcher = {
   },
 
   stop() {
+    if (!this.isActive) {
+      return;
+    }
     clearInterval(this.intervalId);
     this.isActive = false;
   },

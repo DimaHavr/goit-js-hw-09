@@ -12,33 +12,45 @@ const refs = {
   dataDaysEl: document.querySelector('[data-days]'),
 };
 
-startBtn.addEventListener('click', () => {
-  timer.start();
-});
-
 const timer = {
   intervalId: null,
   isActive: false,
 
-  start() {
-    if (this.isActive) {
+  isDisable() {
+    if (!this.isActive) {
       return;
     }
+    clearInterval(this.intervalId);
+    this.isActive = false;
+  },
+
+  start() {
+    if (this.isActive) {
+      this.isDisable();
+      return;
+    }
+
     this.isActive = true;
 
     this.intervalId = setInterval(() => {
       const selectedTime = new Date(inputEl.value).getTime();
       const currentTime = Date.now();
+
       const result = selectedTime - currentTime;
       if (currentTime > selectedTime) {
-        this.isActive = false;
-        clearInterval(this.intervalId);
-        return Notify.failure('Please choose a date in the future');
+        Notify.failure('Please choose a date in the future');
+        this.isDisable();
+        return;
       }
       updateTimerFace(convertMs(result));
+      this.isActive = false;
     }, 1000);
   },
 };
+
+startBtn.addEventListener('click', () => {
+  timer.start();
+});
 
 flatPicker(inputEl, timer);
 
