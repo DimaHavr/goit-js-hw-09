@@ -17,31 +17,57 @@ img {
   max-width: 100%;
 }
 
+.label,
+.value {
+  font-size: 2.2rem;
+  background: url("https://res.cloudinary.com/nikita-rudenko/image/upload/v1544906837/stripe_c982eebe592d6c30f2034f5ce80b1fc6.png");
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: moveBg 10s linear infinite;
+}
+
+@keyframes moveBg {
+  0% {
+    background-position: 0% 30%;
+  }
+  100% {
+    background-position: 1000% 500%;
+  }
+}
+
 .timer {
-  margin-top: 25px;
   display: flex;
-  gap: 25px;
+  justify-content: flex-start;
 }
 
 .field {
+  color: #000000;
+  text-transform: uppercase;
   display: flex;
+
   flex-direction: column;
   align-items: center;
-  gap: 15px;
 }
 
-.value {
-  font-size: 35px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: #212121;
-  letter-spacing: 5px;
+.field .label {
+  padding: 0 14px;
+  font-size: 0.8rem;
 }
-.label {
-  text-transform: uppercase;
-  font-size: 20px;
-  font-weight: 700;
-  line-height: 1.2;
-  color: #212121;
-  letter-spacing: 5px;
+
+.field .label .value {
+  font-size: 3rem;
+}
+
+@media (max-width: 740px) {
+  .label {
+    font-size: 1.7rem;
+  }
+  .field .label {
+    padding: 0 16px;
+    font-size: 0.6rem;
+  }
+  .field .label .value {
+    font-size: 2rem;
+  }
 }
