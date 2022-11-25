@@ -15,18 +15,12 @@ const refs = {
 const timer = {
   intervalId: null,
   isActive: false,
-
-  isDisable() {
-    if (!this.isActive) {
-      return;
-    }
-    clearInterval(this.intervalId);
-    this.isActive = false;
-  },
+  DELAY: 1000,
 
   start() {
     if (this.isActive) {
-      this.isDisable();
+      clearInterval(this.intervalId);
+      this.isActive = false;
       return;
     }
 
@@ -37,14 +31,19 @@ const timer = {
       const currentTime = Date.now();
 
       const result = selectedTime - currentTime;
-      if (currentTime > selectedTime) {
+      if (!selectedTime) {
+        this.isActive = false;
+        clearInterval(this.intervalId);
+        return;
+      } else if (currentTime > selectedTime) {
         Notify.failure('Please choose a date in the future');
-        this.isDisable();
+        this.isActive = false;
+        clearInterval(this.intervalId);
         return;
       }
       updateTimerFace(convertMs(result));
       this.isActive = false;
-    }, 1000);
+    }, this.DELAY);
   },
 };
 
