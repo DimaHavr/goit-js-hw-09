@@ -1,7 +1,12 @@
 import flatPicker from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+};
 const startBtn = document.querySelector('[data-start]');
 const inputEl = document.querySelector('#datetime-picker');
 
@@ -82,7 +87,7 @@ const timer = new Timer({
   onTick: updateTimerFace,
 });
 
-flatPicker(inputEl, Timer.prototype);
+flatPicker(inputEl, options);
 
 startBtn.addEventListener('click', timer.start.bind(timer));
 
