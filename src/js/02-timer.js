@@ -1,14 +1,10 @@
 import flatPicker from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
-const options = {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
-};
+
 const startBtn = document.querySelector('[data-start]');
 const inputEl = document.querySelector('#datetime-picker');
+const currentTime = Date.now();
 
 const refs = {
   dataSecondsEl: document.querySelector('[data-seconds]'),
@@ -17,23 +13,31 @@ const refs = {
   dataDaysEl: document.querySelector('[data-days]'),
 };
 
+startBtn.disabled = true;
+
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+
+  onClose(selectedDates) {
+    if (selectedDates[0].getTime() > currentTime) {
+      startBtn.disabled = false;
+      return;
+    }
+    Notify.failure('Please choose a date in the future');
+  },
+};
+
 class Timer {
   constructor({ onTick }) {
     this.intervalId = null;
-    this.isActive = false;
     this.DELAY = 1000;
     this.onTick = onTick;
   }
 
   start() {
-    if (this.isActive) {
-      clearInterval(this.intervalId);
-      this.isActive = false;
-      return;
-    }
-
-    this.isActive = true;
-
     this.intervalId = setInterval(() => {
       const selectedTime = new Date(inputEl.value).getTime();
       const currentTime = Date.now();
@@ -41,17 +45,13 @@ class Timer {
       const time = this.convertMs(deltaTime);
 
       if (!selectedTime) {
-        this.isActive = false;
         clearInterval(this.intervalId);
         return;
       } else if (currentTime > selectedTime) {
-        Notify.failure('Please choose a date in the future');
-        this.isActive = false;
         clearInterval(this.intervalId);
         return;
       }
       this.onTick(time);
-      this.isActive = false;
     }, this.DELAY);
   }
 

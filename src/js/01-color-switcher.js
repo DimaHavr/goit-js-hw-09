@@ -2,31 +2,26 @@ const startBtn = document.querySelector('[data-start]');
 const stopBtn = document.querySelector('[data-stop]');
 const bodyEl = document.querySelector('body');
 
+stopBtn.disabled = true;
+
 class ColorSwitcher {
   constructor() {
     this.intervalId = null;
-    this.isActive = false;
     this.DELAY = 1000;
   }
 
   start() {
-    if (this.isActive) {
-      return;
-    }
-
-    this.isActive = true;
-
     this.intervalId = setInterval(() => {
       bodyEl.style.backgroundColor = this.getRandomHexColor();
     }, this.DELAY);
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
   }
 
   stop() {
-    if (!this.isActive) {
-      return;
-    }
     clearInterval(this.intervalId);
-    this.isActive = false;
+    stopBtn.disabled = true;
+    startBtn.disabled = false;
   }
 
   getRandomHexColor() {

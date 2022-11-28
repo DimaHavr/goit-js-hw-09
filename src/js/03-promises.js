@@ -26,8 +26,9 @@ function createPromises() {
       promiseCounter += 1;
       return;
     } else {
-      clearInterval(intervalId);
       promiseCounter = 0;
+      clearInterval(intervalId);
+
       return;
     }
   }, 0);
